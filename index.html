@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/nexusui@2.0.5/dist/NexusUI.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.js"></script>
+    <script src="http://unpkg.com/tone"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Vito°</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="main-container">
+        <div class="main-container--left">
+          <div class="dials-container">
+            <div class="dials">
+              <div class="dial-group">
+                <div id="dial-edgy"></div>
+                <div class="label">Edgy</div>
+                <span id="number-edgy" class="number"></span>
+              </div>
+              <div class="dial-group">
+                <div id="dial-sleepy"></div>
+                <div class="label">Sleepy</div>
+                <span id="number-sleepy" class="number"></span>
+              </div>
+              <div class="dial-group">
+                <div id="dial-fluffy"></div>
+                <div class="label">Fluffy</div>
+                <span id="number-fluffy" class="number"></span>
+              </div>
+            </div>
+          </div>
+          <div class="oscilloscope-container">
+            <div class="oscilloscope-label" id="current-track-label">
+              (No Track Playing)
+            </div>
+            <div class="oscilloscope" id="oscilloscope"></div>
+          </div>
+        </div>
+        <div class="main-container--right">
+          <div id="panel"></div>
+          <div class="panel-labels">
+            <span class="panel-label" id="label-day">Day</span>
+            <span class="panel-label" id="label-rain">Rain</span>
+            <span class="panel-label" id="label-night">Night</span>
+            <span class="panel-label" id="label-cloud">Cloud</span>
+          </div>
+        </div>
+      </div>
+      <div class="playback-container">
+        <div class="playback-container--left">
+          <button class="play-button" id="play-button">
+            <svg width="80" height="80" viewBox="0 0 100 100">
+              <polygon
+                points="30,20 80,50 30,80"
+                class="play-icon"
+                fill="#f0f8ff"
+              />
+            </svg>
+          </button>
+
+          <button class="pause-button" id="pause-button" style="display: none">
+            <svg width="80" height="69" viewBox="0 0 100 100">
+              <rect x="30" y="20" width="16" height="60" fill="#f0f8ff" />
+              <rect x="58" y="20" width="16" height="60" fill="#f0f8ff" />
+            </svg>
+          </button>
+
+          <button class="stop-button" id="stop-button">
+            <svg width="80" height="80" viewBox="0 0 100 100">
+              <rect x="25" y="25" width="50" height="50" fill="#f0f8ff" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="playback-container--right">
+          <button id="playDemoButton" class="button">Play Demo Music</button>
+          <label class="custom-file-upload button">
+            <input type="file" id="uploadMusicButton" accept="audio/*" />
+            Upload Music
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="gif-container"
+      style="position: absolute; top: 0; left: 0; pointer-events: none"
+    ></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
