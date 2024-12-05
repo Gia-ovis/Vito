@@ -18,49 +18,70 @@ let fluffyInterval = null; // Timer variables
 
 let rainPlayer;
 let windPlayer;
-let fluffySounds;
+let fluffySounds = [];
 let musicPlayer;
-let preGain,
-  lowPass,
-  compressor,
-  distortion,
-  eq,
-  chorus,
-  delay,
-  reverb,
-  limiter;
+let preGain, lowPass, compressor, distortion, chorus, delay, reverb, limiter;
 
 ////////////////////////////////////////////////////////////
 // TONE.JS SETUP & INITIALIZING
 ////////////////////////////////////////////////////////////
 
-rainPlayer = new Tone.Player({
-  url: "audio/rain.mp3",
-  loop: true,
-  autostart: true,
-  volume: -Infinity,
-}).toDestination();
+async function initAudio() {
+  if (Tone.context.state !== "running") {
+    await Tone.start();
+    console.log("Tone.js AudioContext started");
+  }
+}
 
-windPlayer = new Tone.Player({
-  url: "audio/wind.mp3",
-  loop: true,
-  autostart: true,
-  volume: -Infinity,
-}).toDestination();
+async function loadAudioFromJson() {
+  try {
+    const response = await fetch("tracks.json");
+    const audioData = await response.json();
 
-// fluffySounds = new Tone.Players({   //Tried using players but failed
-//   fluffy1: "audio/meow1.mp3",
-//   fluffy2: "audio/meow2.mp3",
-//   fluffy3: "audio/sheep.mp3",
-//   fluffy4: "audio/dog.mp3",
-//   fluffy5: "audio/bird.mp3",
-// }).toDestination();
+    rainPlayer = new Tone.Player({
+      url: audioData.rain,
+      loop: true,
+      autostart: true,
+      volume: -Infinity,
+    }).toDestination();
+    rainPlayer.sync();
 
-fluffySounds = [
-  new Tone.Player({ url: "audio/meow1.mp3", loop: false }).toDestination(),
-  new Tone.Player({ url: "audio/meow2.mp3", loop: false }).toDestination(),
-  new Tone.Player({ url: "audio/bird.mp3", loop: false }).toDestination(),
-];
+    windPlayer = new Tone.Player({
+      url: audioData.wind,
+      loop: true,
+      autostart: true,
+      volume: -Infinity,
+    }).toDestination();
+    windPlayer.sync();
+
+    fluffySounds = [
+      new Tone.Player({
+        url: audioData.fluffy[0],
+        loop: false,
+      }).toDestination(),
+      new Tone.Player({
+        url: audioData.fluffy[1],
+        loop: false,
+      }).toDestination(),
+      new Tone.Player({
+        url: audioData.fluffy[2],
+        loop: false,
+      }).toDestination(),
+    ];
+    fluffySounds.forEach((player, index) => {
+      player.sync();
+    });
+
+    console.log("Audio players initialized from JSON!");
+  } catch (error) {
+    console.error("Failed to load audio from JSON:", error);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  initAudio();
+  loadAudioFromJson();
+});
 
 function updateFluffy() {
   if (fluffyInterval) {
@@ -84,13 +105,6 @@ function updateFluffy() {
   }, intervalTime);
 }
 
-rainPlayer.sync();
-windPlayer.sync();
-
-fluffySounds.forEach((player, index) => {
-  player.sync();
-});
-
 preGain = new Tone.Gain(0.5);
 
 compressor = new Tone.Compressor({
@@ -110,14 +124,6 @@ lowPass = new Tone.Filter({
 distortion = new Tone.Distortion({
   distortion: 0.4,
   wet: 0,
-});
-
-eq = new Tone.EQ3({
-  low: 0,
-  mid: 0,
-  high: 0,
-  lowFrequency: 400,
-  highFrequency: 2500,
 });
 
 chorus = new Tone.Chorus({
@@ -142,17 +148,6 @@ reverb = new Tone.JCReverb({
 
 limiter = new Tone.Limiter(-6);
 
-async function initAudio() {
-  if (Tone.context.state !== "running") {
-    await Tone.start();
-    console.log("Tone.js AudioContext started");
-  }
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  initAudio();
-});
-
 ////////////////////////////////////////////////////////////
 // UPLOAD MUSIC & PLAYBACK CONTROL
 ////////////////////////////////////////////////////////////
@@ -171,7 +166,6 @@ async function loadCustomMusic(url, trackName = null) {
     compressor,
     lowPass,
     distortion,
-    eq,
     chorus,
     delay,
     reverb,

@@ -1,0 +1,12 @@
+{
+  "rain": "audio/rain.mp3",
+  "wind": "audio/wind.mp3",
+  "fluffy": [
+    "audio/meow1.mp3",
+    "audio/meow2.mp3",
+    "audio/bird.mp3",
+    "audio/sheep.mp3",
+    "audio/dog.mp3"
+  ],
+  "demo": "audio/orchid-gia.wav"
+}
