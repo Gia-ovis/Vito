@@ -339,7 +339,7 @@ const dialFluffy = new Nexus.Dial("#dial-fluffy", {
   mode: "relative",
   min: 0,
   max: 1,
-  step: 0.1,
+  step: 0,
   value: 0,
 });
 const numberFluffy = new Nexus.Number("#number-fluffy", {
